@@ -1,7 +1,7 @@
 
-# RESMED-gui
+# rusmed-gui
 
-**RESMED-gui** es una interfaz gráfica basada en **Django** para [describir aquí brevemente qué hace tu proyecto].
+**rusmed-gui** es una interfaz gráfica basada en **Django** para [describir aquí brevemente qué hace tu proyecto].
 
 ## 📌 Características principales
 
@@ -19,8 +19,8 @@
 
 1. Clona el repositorio:
    ```bash
-   git clone https://github.com/tu_usuario/RESMED-gui.git
-   cd RESMED-gui
+   git clone https://github.com/tu_usuario/rusmed-gui.git
+   cd rusmed-gui
    ```
 
 2. Crea y activa un entorno virtual:
@@ -46,9 +46,9 @@
 ## 📂 Estructura del proyecto
 
 ```
-RESMED-gui/
+rusmed-gui/
 ├── manage.py
-├── resmed_gui/         # Configuración principal del proyecto
+├── rusmed_gui/         # Configuración principal del proyecto
 ├── app/                # Tu(s) aplicación(es) Django
 ├── templates/          # Plantillas HTML
 ├── static/             # Archivos estáticos
@@ -73,4 +73,4 @@ RESMED-gui/
 
 ---
 
-¡Gracias por usar **RESMED-gui**!
+¡Gracias por usar **rusmed-gui**!

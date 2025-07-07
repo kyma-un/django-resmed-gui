@@ -1,5 +1,5 @@
 """
-WSGI config for resmed_gui project.
+WSGI config for rusmed_gui project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'resmed_gui.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rusmed_gui.settings')
 
 application = get_wsgi_application()
