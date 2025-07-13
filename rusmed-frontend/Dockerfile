@@ -1,6 +1,7 @@
 # --- Build stage ---
 FROM node:20 AS build
 
+
 WORKDIR /app
 
 # Copy source code into the container
