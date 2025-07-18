@@ -24,6 +24,6 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api_examenes.urls')),
-    path('oauth/', include('social_django.urls', namespace='social')),
+    path('auth/', include('social_django.urls', namespace='social')),
     path('', home),
 ]

@@ -14,7 +14,7 @@ class PerfilUsuario(models.Model):
         return f"{self.user.username} - {self.get_rol_display()}"
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor_profile')
     cedula = models.CharField(max_length=20, primary_key=True)
     nombre = models.CharField(max_length=100)
     tarjeta_profesional = models.CharField(max_length=50, unique=True)
@@ -25,12 +25,12 @@ class Doctor(models.Model):
         return self.user.get_full_name() or self.user.username
 
 class Paciente(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='paciente_profile')
     cedula = models.CharField(max_length=20, primary_key=True)
     nombre = models.CharField(max_length=100)
-    profesion = models.CharField(max_length=100)
-    peso = models.DecimalField(max_digits=5, decimal_places=2)
-    altura = models.DecimalField(max_digits=4, decimal_places=2)
+    profesion = models.CharField(max_length=100, null=True, blank=True)
+    peso = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    altura = models.DecimalField(max_digits=4, decimal_places=2, null=True, blank=True)
     fecha_nacimiento = models.DateField(null=True, blank=True)
 
     def __str__(self):

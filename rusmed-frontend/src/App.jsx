@@ -2,12 +2,38 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Container, Row, Col, Button, Form, Image } from "react-bootstrap";
 import { HouseFill, GearFill, InfoCircleFill } from "react-bootstrap-icons";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import { HomePage } from './pages/HomePage'; 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css"
+import LoginPage from './pages/LoginPage';
+import AdminDashboard from './pages/AdminDashboard';
+import HomePaciente from './pages/HomePaciente';
+import HomeDoctor from './pages/HomeDoctor';
+import ProtectedRoute from './components/ProtectedRoute';
+import AdminCrearDoctor from './pages/AdminCrearDoctor';
+import DoctorView from './pages/DoctorView';
 
-function Sidebar() {
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+console.log("Google Client ID:", clientId);
+
+function AppLayout({ children }) {
+  return (
+    <Container fluid>
+      <Row className="general-container">
+        <Col xs="auto" className="p-0">
+          <Sidebar />
+        </Col>
+        <Col className="p-0 w-100">
+          {children}
+        </Col>
+      </Row>
+    </Container>
+  );
+}
+
+function Sidebar({ userRole }) {
   return (
     <div className="d-flex flex-column bg-dark text-white p-3 vh-100" style={{ width: "80px" }}>
       <Link to="/" className="mb-4 text-white text-center">
@@ -19,6 +45,12 @@ function Sidebar() {
       <Link to="/about" className="mb-4 text-white text-center">
         <InfoCircleFill size={24} />
       </Link>
+      {userRole === "admin" && (
+        <Link to="/admin/crear-doctor" className="mb-4 text-white text-center">
+          {/* Aquí podrías poner un icono, o texto pequeño */}
+          Crear Doctor
+        </Link>
+      )}
     </div>
   );
 }
@@ -65,22 +97,63 @@ function About() {
 
 function App() {
   return (
-    <Router>
-      <Container fluid>
-        <Row className="general-container">
-          <Col xs="auto" className="p-0">
-            <Sidebar />
-          </Col>
-          <Col className="p-0 w-100 ">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/config" element={<Config />} />
-              <Route path="/about" element={<About />} />
-            </Routes>
-          </Col>
-        </Row>
-      </Container>
-    </Router>
+    <GoogleOAuthProvider clientId={clientId}>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+
+          <Route path="/paciente" element={
+            <ProtectedRoute role="paciente">
+              <AppLayout><HomePaciente /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/doctor" element={
+            <ProtectedRoute role="doctor">
+              <AppLayout><DoctorView /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/examen/:citaId" element={
+            <ProtectedRoute role="doctor">
+              <AppLayout>
+                <ExamenView />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin" element={
+            <ProtectedRoute role="admin">
+              <AppLayout><AdminDashboard /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/admin/crear-doctor" element={
+            <ProtectedRoute role="admin">
+              <AppLayout><AdminCrearDoctor /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/config" element={
+            <ProtectedRoute>
+              <AppLayout><Config /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/about" element={
+            <ProtectedRoute>
+              <AppLayout><About /></AppLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <AppLayout><Home /></AppLayout>
+            </ProtectedRoute>
+          } />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 
