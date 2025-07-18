@@ -4,6 +4,7 @@ from .views import (
     DoctorViewSet, PacienteViewSet, ExamenViewSet, AcompananteViewSet,
     CitaViewSet, ExamenRealizadoViewSet
 )
+from .views import LoginManualView
 
 router = DefaultRouter()
 router.register(r'doctores', DoctorViewSet)
@@ -15,4 +16,5 @@ router.register(r'examenes-realizados', ExamenRealizadoViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('login/manual/', LoginManualView.as_view(), name='login_manual'),
 ]
