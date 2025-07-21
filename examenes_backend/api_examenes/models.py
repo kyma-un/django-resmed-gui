@@ -1,6 +1,16 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+def ruta_video_diagnostico(instance, filename):
+    # Obtener cédula del paciente
+    cedula = instance.cita.paciente.cedula
+    # Obtener ID de la cita
+    cita_id = instance.cita.id
+    # Nombre fijo o personalizado del archivo
+    nombre_archivo = 'video.mp4'
+    # Retornar ruta relativa al directorio MEDIA
+    return os.path.join('diagnostico', str(cedula), str(cita_id), nombre_archivo)
+
 class PerfilUsuario(models.Model):
     ROLES = (
         ('paciente', 'Paciente'),
@@ -53,6 +63,7 @@ class Acompanante(models.Model):
         return f"{self.nombre} ({self.parentesco})"
 
 class Cita(models.Model):
+    id = models.AutoField(primary_key=True)
     especialidad = models.CharField(max_length=100)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -66,12 +77,12 @@ class Cita(models.Model):
         return f"Cita de {self.paciente.nombre} con {self.doctor.nombre} el {self.fecha}"
 
 class ExamenRealizado(models.Model):
-    cita = models.OneToOneField(Cita, on_delete=models.CASCADE)
+    cita = models.OneToOneField(Cita, on_delete=models.CASCADE, primary_key=True)
     doctor_ejecutor = models.ForeignKey(Doctor, on_delete=models.SET_NULL, null=True, related_name='examenes_realizados')
     fecha_realizacion = models.DateField()
     hora_realizacion = models.TimeField()
     resultado_examen = models.TextField()
-    imagenes_diagnosticas = models.FileField(upload_to='diagnosticos/', null=True, blank=True)
+    video_diagnostico = models.FileField(upload_to=ruta_video_diagnostico, null=True, blank=True)
 
     def __str__(self):
         return f"Resultado del examen {self.cita.examen.nombre} de {self.cita.paciente.nombre}"

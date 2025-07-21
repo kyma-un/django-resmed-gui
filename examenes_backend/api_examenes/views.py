@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -23,6 +24,13 @@ from google.auth.transport import requests
 
 User = get_user_model()
 
+class HistorialPacienteAPIView(generics.ListAPIView):
+    serializer_class = ExamenSerializer
+
+    def get_queryset(self):
+        paciente_id = self.request.query_params.get('paciente_id')
+        return Examen.objects.filter(cita__paciente_id=paciente_id).order_by('-fecha', '-hora')
+    
 class CitasDelDiaDoctorAPIView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
